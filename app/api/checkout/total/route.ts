@@ -38,7 +38,7 @@ async function createSubtotal(request: Request) {
   if (error) throw error;
 
   let subTotal = 0;
-  let prices = data!;
+  const prices = data!;
   prices.forEach((item) => {
     subTotal += item.price;
   });
