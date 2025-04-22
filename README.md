@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Get subtotal
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+{
+    tagIds: [
+        hex1,
+        hex2,
+        hex3
+    ]
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+const tags = []
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+const costs = [] = DynamoDBGet(tags) // do lookup on the Product table to match the ids
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+const subtotal = costs.sum()
 
-## Learn More
+send subtotal as response back to ESP 32
 
-To learn more about Next.js, take a look at the following resources:
+# Purchase
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+{
+    tagIds: [
+        hex1,
+        hex2,
+        hex3
+    ]
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+DynamoDBAddPurchase(tags)
 
-## Deploy on Vercel
+// purchase table
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+purchase_id
+product_id
+time
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+RFID
+tag_id
+payload: product uuid
+
+tag_id == product uuid stored in db
+
+payload.product uuid == product uuid stored in db
+
+read tags in loop
+
+read tag_1 -> tag_1 is read so recognize tag 1 again
+
+what happens if there are two tag_1 s
+
+only read tag_1 once
