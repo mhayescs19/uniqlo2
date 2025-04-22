@@ -30,7 +30,7 @@ async function createSubtotal(request: Request) {
 
   console.log("tagID: " + tagIds[0]);
 
-  let { data, error } = await supabase
+  const { data, error } = await supabase
     .from("product")
     .select("price")
     .eq("id", tagIds[0]);
