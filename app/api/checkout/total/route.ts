@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-
+import { supabase } from "@/config/supabase";
 /**
  *
  * @param request list of product uuids
@@ -28,10 +28,22 @@ async function createSubtotal(request: Request) {
     }
   });
 
+  console.log("tagID: " + tagIds[0]);
+
+  let { data, error } = await supabase
+    .from("product")
+    .select("price")
+    .eq("id", tagIds[0]);
+
+  if (error) throw error;
+
   let subTotal = 0;
-  tagIds.forEach((item) => {
-    subTotal += item;
+  let prices = data!;
+  prices.forEach((item) => {
+    subTotal += item.price;
   });
+
+  console.log(subTotal);
 
   return NextResponse.json(subTotal);
 }
