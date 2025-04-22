@@ -10,12 +10,13 @@ export default function Home() {
       <Button
         className="border-solid border-amber-200 cursor-pointer"
         onClick={async () => {
-          const ids = [1234, 1235, 1236, 1237, 1238];
+          const ids = [1172546379849105];
 
           const payload = {
             tagIds: ids,
           };
 
+          console.log(JSON.stringify(payload));
           const response = await fetch("/api/checkout/total", {
             method: "POST",
             headers: {
