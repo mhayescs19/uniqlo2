@@ -26,6 +26,8 @@ export default function Home() {
 
           if (!response.ok) {
             const val = await response.json();
+
+            console.log(val);
           }
 
           const val = await response.json();
