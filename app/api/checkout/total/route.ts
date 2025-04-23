@@ -29,11 +29,12 @@ async function createSubtotal(request: Request) {
   });
 
   console.log("tagID: " + tagIds[0]);
+  const tags: number[] = tagIds;
 
   const { data, error } = await supabase
     .from("product")
     .select("price")
-    .eq("id", tagIds[0]);
+    .in("id", tags); // find all products that have the tag ids
 
   if (error) throw error;
 
