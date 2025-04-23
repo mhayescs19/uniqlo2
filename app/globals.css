@@ -120,3 +120,18 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* fonts */
+.factoExtraBold-title {
+  font-family: "facto", sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  font-style: normal;
+}
+
+.factoExtraBold-heading {
+  font-family: "facto", sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  font-style: normal;
+}
