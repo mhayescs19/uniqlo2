@@ -28,6 +28,13 @@ export default function AddInventoryCard() {
   const fields = new ProductForm();
   const [formData, setFormData] = useState(fields);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev, // copy all previous elements
+      [e.target.name]: e.target.value, // overwrite the updated inputs by using e (e is the event object that contains changes to the input field)
+    }));
+  };
+
   return (
     <div>
       <div className="factoExtraBold-title text-left">ADD PRODUCT</div>
@@ -41,6 +48,7 @@ export default function AddInventoryCard() {
               name="productName"
               placeholder="Enter product name"
               value={formData.productName}
+              onChange={handleChange}
             ></input>
           </div>
         </form>
