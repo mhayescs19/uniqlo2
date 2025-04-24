@@ -31,12 +31,19 @@ export default function AddInventoryCard() {
   const [formData, setFormData] = useState(fields);
   const [errors, setErrors] = useState(fieldErrors);
 
+  const [selectedSize, setSelectedSize] = useState("");
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev, // copy all previous elements
       [e.target.name]: e.target.value, // overwrite the updated inputs by using e (e is the event object that contains changes to the input field)
     }));
   };
+
+  const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedSize(e.target.value);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // prevent immediate page refresh; allows custom logic
 
@@ -102,6 +109,38 @@ export default function AddInventoryCard() {
             handleChange={handleChange}
             error={errors.sku}
           />
+          <label className="font-bold">Fit</label>
+          <div className="flex flex-row gap-4">
+            <label
+              className={`relative w-12.75 flex justify-center items-center font-medium pill ${
+                selectedSize === "XS" ? "selected" : ""
+              }`}
+            >
+              <input
+                type="radio"
+                name="fit"
+                value="XS"
+                checked={selectedSize === "XS"}
+                onChange={handleSizeChange}
+                className="sr-only"
+              />
+              <span className="ml-[-3px]">XS</span>
+            </label>
+            <label
+              className={`w-12.75 text-center font-medium pill ${
+                selectedSize === "S" ? "selected" : ""
+              }`}
+            >
+              <input
+                type="radio"
+                name="fit"
+                value="S"
+                checked={selectedSize === "S"}
+                onChange={handleSizeChange}
+              />
+              S
+            </label>
+          </div>
           <div className="flex flex-col">
             <label className="pb-1.75 font-bold">SKU</label>
             <input
