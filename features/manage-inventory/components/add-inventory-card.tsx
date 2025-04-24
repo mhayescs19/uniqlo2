@@ -1,5 +1,7 @@
 "use client";
 
+import FormField from "@/components/form-field";
+import PillSelectRadio from "@/components/pill-select-radio";
 import { useState } from "react";
 
 class ProductForm {
@@ -129,35 +131,19 @@ export default function AddInventoryCard() {
           />
           <label className="font-bold">Fit</label>
           <div className="flex flex-row gap-4">
-            <label
-              className={`relative w-12.75 flex justify-center items-center font-medium pill ${
-                selectedSize === "XS" ? "selected" : ""
-              }`}
-            >
-              <input
-                type="radio"
-                name="fit"
-                value="XS"
-                checked={selectedSize === "XS"}
-                onChange={handleSizeChange}
-                className="sr-only"
-              />
-              <span className="ml-[-3px]">XS</span>
-            </label>
-            <label
-              className={`w-12.75 text-center font-medium pill ${
-                selectedSize === "S" ? "selected" : ""
-              }`}
-            >
-              <input
-                type="radio"
-                name="fit"
-                value="S"
-                checked={selectedSize === "S"}
-                onChange={handleSizeChange}
-              />
-              S
-            </label>
+            <PillSelectRadio
+              name="XS"
+              formGroupIdentifier="fit"
+              selectionState={selectedSize}
+              handleSelectionChange={handleSizeChange}
+              textOffset={-3}
+            />
+            <PillSelectRadio
+              name="S"
+              formGroupIdentifier="fit"
+              selectionState={selectedSize}
+              handleSelectionChange={handleSizeChange}
+            />
           </div>
           <div className="flex flex-col">
             <label className="pb-1.75 font-bold">SKU</label>
