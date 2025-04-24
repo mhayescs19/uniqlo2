@@ -121,6 +121,9 @@
   }
 }
 
+@layer components;
+@layer utilities;
+
 /* fonts */
 .factoExtraBold-title {
   font-family: "facto", sans-serif;
@@ -134,4 +137,29 @@
   font-weight: 800;
   font-size: 24px;
   font-style: normal;
+}
+
+/* pill styling for radio button */
+.pill {
+  display: inline-block;
+  border: 2px solid #e3e8f0 /* outline-gray-light */;
+  border-radius: 0.3125rem;
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.pill:hover {
+  background-color: #f7f7f7;
+}
+
+.pill input {
+  display: none;
+}
+
+.pill.selected {
+  background-color: #f7f7f7;
+  border-color: #c6c6c6 /* outline-gray-light */;
 }
