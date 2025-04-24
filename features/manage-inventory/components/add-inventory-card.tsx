@@ -16,6 +16,24 @@ class ProductForm {
   }
 }
 
+class ProductFormErrors {
+  productName: string;
+  sku: string;
+  price: string;
+  fit: string;
+
+  constructor() {
+    this.productName = "";
+    this.sku = "";
+    this.price = "";
+    this.fit = "";
+  }
+
+  isErrors() {
+    return Object.values(this).some((error) => error !== ""); // check to see if there is at least one property that is not an empty string
+  }
+}
+
 enum FitStyles {
   XSmall = "xs",
   Small = "s",
