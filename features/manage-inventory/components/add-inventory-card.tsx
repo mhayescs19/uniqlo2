@@ -84,6 +84,24 @@ export default function AddInventoryCard() {
               </div>
             )}
           </div>
+          <FormField
+            inputLabel="Name"
+            type="text"
+            identifier="productName"
+            placeholder="Enter product name"
+            value={formData.productName}
+            handleChange={handleChange}
+            error={errors.productName}
+          />
+          <FormField
+            inputLabel="SKU"
+            type="number"
+            identifier="sku"
+            placeholder="Enter product SKU"
+            value={formData.sku}
+            handleChange={handleChange}
+            error={errors.sku}
+          />
           </div>
           <button type="submit" className="cursor-pointer">
             Add to inventory
