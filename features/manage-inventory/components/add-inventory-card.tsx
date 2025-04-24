@@ -102,6 +102,21 @@ export default function AddInventoryCard() {
             handleChange={handleChange}
             error={errors.sku}
           />
+          <div className="flex flex-col">
+            <label className="pb-1.75 font-bold">SKU</label>
+            <input
+              className="border-2 border-C6C6C6 p-3 font-medium text-sm text-605C5C rounded-[5px]"
+              type="text"
+              name="productName"
+              placeholder="Enter product name"
+              value={formData.productName}
+              onChange={handleChange}
+            ></input>
+            {errors.productName !== "" && (
+              <div className="pt-1 text-red-700 text-[0.7rem]">
+                {errors.productName}
+              </div>
+            )}
           </div>
           <button type="submit" className="cursor-pointer">
             Add to inventory
