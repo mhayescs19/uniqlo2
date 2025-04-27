@@ -7,14 +7,14 @@ import { useState } from "react";
 class ProductForm {
   productName: string;
   sku: string;
-  price: number;
+  price: string;
   fit: FitStyles;
 
   constructor() {
     this.productName = "";
     this.sku = "";
-    this.price = 0;
-    this.fit = FitStyles.XSmall;
+    this.price = "";
+    this.fit = FitStyles.NotSelected;
   }
 }
 
@@ -37,6 +37,7 @@ class ProductFormErrors {
 }
 
 enum FitStyles {
+  NotSelected = "xx",
   XSmall = "xs",
   Small = "s",
   Medium = "m",
@@ -61,7 +62,10 @@ export default function AddInventoryCard() {
   };
 
   const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedSize(e.target.value);
+    setFormData((prev) => ({
+      ...prev, // copy all previous elements
+      [e.target.name]: e.target.value, // overwrite the updated inputs by using e (e is the event object that contains changes to the input field)
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -87,30 +91,21 @@ export default function AddInventoryCard() {
       errors.productName = "Name must be at least 2 characters";
     }
 
+    if (formData.fit === FitStyles.NotSelected) {
+      errors.fit = "Please select a product fit";
+    }
+
     return errors;
   };
 
   return (
     <div>
-      <div className="factoExtraBold-title text-left">ADD PRODUCT</div>
-      <div className="w-full flex rounded-md border-black">
-        <form className="flex flex-col gap-3.75 pt-2" onSubmit={handleSubmit}>
-          <div className="flex flex-col">
-            <label className="pb-1.75 font-bold">Name</label>
-            <input
-              className="border-2 border-C6C6C6 p-3 font-medium text-sm text-605C5C rounded-[5px]"
-              type="text"
-              name="productName"
-              placeholder="Enter product name"
-              value={formData.productName}
-              onChange={handleChange}
-            ></input>
-            {errors.productName !== "" && (
-              <div className="pt-1 text-red-700 text-[0.7rem]">
-                {errors.productName}
-              </div>
-            )}
-          </div>
+      <div className="factoExtraBold-title text-left mb-1.5">ADD PRODUCT</div>
+      <div className="w-full flex rounded-md">
+        <form
+          className="flex flex-col gap-3.75 max-w-sm mx-auto border border-outline-gray-light-4 p-4 rounded-lg"
+          onSubmit={handleSubmit}
+        >
           <FormField
             inputLabel="Name"
             type="text"
@@ -120,49 +115,70 @@ export default function AddInventoryCard() {
             handleChange={handleChange}
             error={errors.productName}
           />
-          <FormField
-            inputLabel="SKU"
-            type="number"
-            identifier="sku"
-            placeholder="Enter product SKU"
-            value={formData.sku}
-            handleChange={handleChange}
-            error={errors.sku}
-          />
+          <div className="flex flex-row gap-3.75">
+            <FormField
+              inputLabel="SKU"
+              type="number"
+              identifier="sku"
+              placeholder="Enter product SKU"
+              value={formData.sku}
+              handleChange={handleChange}
+              error={errors.sku}
+            />
+            <div className="w-25">
+              <FormField
+                inputLabel="Price"
+                type="number"
+                identifier="price"
+                placeholder="0.00"
+                value={formData.price}
+                handleChange={handleChange}
+                error={errors.price}
+              />
+            </div>
+          </div>
           <label className="font-bold">Fit</label>
           <div className="flex flex-row gap-4">
             <PillSelectRadio
               name="XS"
               formGroupIdentifier="fit"
-              selectionState={selectedSize}
+              selectionState={formData.fit}
               handleSelectionChange={handleSizeChange}
               textOffset={-3}
             />
             <PillSelectRadio
               name="S"
               formGroupIdentifier="fit"
-              selectionState={selectedSize}
+              selectionState={formData.fit}
+              handleSelectionChange={handleSizeChange}
+            />
+            <PillSelectRadio
+              name="M"
+              formGroupIdentifier="fit"
+              selectionState={formData.fit}
+              handleSelectionChange={handleSizeChange}
+            />
+            <PillSelectRadio
+              name="L"
+              formGroupIdentifier="fit"
+              selectionState={formData.fit}
+              handleSelectionChange={handleSizeChange}
+            />
+            <PillSelectRadio
+              name="XL"
+              formGroupIdentifier="fit"
+              selectionState={formData.fit}
               handleSelectionChange={handleSizeChange}
             />
           </div>
-          <div className="flex flex-col">
-            <label className="pb-1.75 font-bold">SKU</label>
-            <input
-              className="border-2 border-C6C6C6 p-3 font-medium text-sm text-605C5C rounded-[5px]"
-              type="text"
-              name="productName"
-              placeholder="Enter product name"
-              value={formData.productName}
-              onChange={handleChange}
-            ></input>
-            {errors.productName !== "" && (
-              <div className="pt-1 text-red-700 text-[0.7rem]">
-                {errors.productName}
-              </div>
-            )}
-          </div>
-          <button type="submit" className="cursor-pointer">
-            Add to inventory
+          {errors.fit !== "" && (
+            <div className="pt-1 text-red-700 text-[0.7rem]">{errors.fit}</div>
+          )}
+          <button
+            type="submit"
+            className="factoExtraBold text-[1.25rem] text-white p-1.75 border-2 border-[outline-gray] bg-black rounded-sm cursor-pointer"
+          >
+            ADD TO INVENTORY
           </button>
         </form>
       </div>
