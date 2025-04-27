@@ -139,6 +139,12 @@
   font-style: normal;
 }
 
+.factoExtraBold {
+  font-family: "facto", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
 /* pill styling for radio button */
 .pill {
   display: inline-block;
