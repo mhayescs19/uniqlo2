@@ -1,4 +1,3 @@
-import InventoryItem from "./inventory-item";
 import { Trash } from "lucide-react";
 
 const items = [
