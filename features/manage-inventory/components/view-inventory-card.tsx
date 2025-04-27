@@ -1,6 +1,21 @@
 import InventoryItem from "./inventory-item";
 import { Trash } from "lucide-react";
 
+const items = [
+  {
+    sku: 1245,
+    fit: "M",
+    name: "3D Knitted Sweater",
+    price: "89.99",
+  },
+  {
+    sku: 4563,
+    fit: "M",
+    name: "3D Knitted Sweater",
+    price: "189.99",
+  },
+];
+
 export default function ViewInventoryCard() {
   return (
     <div>
