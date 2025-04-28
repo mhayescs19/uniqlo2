@@ -10,7 +10,7 @@ export default function Home() {
       <Button
         className="border-solid border-amber-200 cursor-pointer"
         onClick={async () => {
-          const ids = [1172546379849105];
+          const ids = [1172546379849105, 1172546379849105, 1176944426360209];
 
           const payload = {
             tagIds: ids,
@@ -31,14 +31,162 @@ export default function Home() {
             console.log(val);
           }
 
-          const val = await response.json();
+          const { total } = await response.json();
 
           toast("Subtotal generated", {
-            description: `${val}`,
+            description: `${total}`,
           });
         }}
       >
-        Send product ids
+        Subtotal
+      </Button>
+      <Button
+        className="border-solid border-amber-200 cursor-pointer"
+        onClick={async () => {
+          const ids = [1172546379849105, 1172546379849105, 1176944426360209];
+
+          const payload = {
+            tagIds: ids,
+          };
+
+          console.log(JSON.stringify(payload));
+          const response = await fetch("/api/checkout/purchase", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            const val = await response.json();
+
+            console.log(val);
+          }
+
+          const { order } = await response.json();
+
+          toast("Order Id", {
+            description: `${order.id}`,
+          });
+        }}
+      >
+        Purchase
+      </Button>
+      <Button
+        className="border-solid border-amber-200 cursor-pointer"
+        onClick={async () => {
+          const response = await fetch("/api/stats/product/count", {
+            method: "GET",
+          });
+
+          if (!response.ok) {
+            const val = await response.json();
+
+            console.log(val);
+          }
+
+          const { productCount } = await response.json();
+
+          toast("Products", {
+            description: `${productCount}`,
+          });
+        }}
+      >
+        Get product count
+      </Button>
+      <Button
+        className="border-solid border-amber-200 cursor-pointer"
+        onClick={async () => {
+          const ids = [1172546379849105, 1172546379849105, 1176944426360209];
+
+          const payload = {
+            tagIds: ids,
+          };
+
+          console.log(JSON.stringify(payload));
+          const response = await fetch("/api/stats/transaction/sales/value", {
+            method: "GET",
+          });
+
+          if (!response.ok) {
+            const val = await response.json();
+
+            console.log(val);
+          }
+
+          const { totalSales } = await response.json();
+
+          toast("sales", {
+            description: `${totalSales}`,
+          });
+        }}
+      >
+        Get total sales
+      </Button>
+      <Button
+        className="border-solid border-amber-200 cursor-pointer"
+        onClick={async () => {
+          const ids = [1172546379849105, 1172546379849105, 1176944426360209];
+
+          const payload = {
+            tagIds: ids,
+          };
+
+          console.log(JSON.stringify(payload));
+          const response = await fetch(
+            "/api/stats/order/size?type=average&limit=24",
+            {
+              method: "GET",
+            }
+          );
+
+          if (!response.ok) {
+            const val = await response.json();
+
+            console.log(val);
+          }
+
+          const { type, limit } = await response.json();
+
+          toast("sales", {
+            description: `type:${type},limit:${limit}`,
+          });
+        }}
+      >
+        Get metric type limit
+      </Button>
+      <Button
+        className="border-solid border-amber-200 cursor-pointer"
+        onClick={async () => {
+          const ids = [1172546379849105, 1172546379849105, 1176944426360209];
+
+          const payload = {
+            tagIds: ids,
+          };
+
+          console.log(JSON.stringify(payload));
+          const response = await fetch(
+            "/api/stats/transaction/sales?period=24&limit=3",
+            {
+              method: "GET",
+            }
+          );
+
+          if (!response.ok) {
+            const val = await response.json();
+
+            console.log(val);
+          }
+
+          const { period, limit } = await response.json();
+
+          toast("sales", {
+            description: `period:${period},limit:${limit}`,
+          });
+        }}
+      >
+        Get sales by period and limit
       </Button>
     </div>
   );
