@@ -52,6 +52,25 @@ async function createSubtotal(request: Request) {
 
     console.log("things subtotaled");
     console.log(subTotal);
+
+    const webhookPayload = {
+      tagsIds: tagIds,
+    };
+
+    const webhookReponse = await fetch("/api/checkout/purchase/details", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(webhookPayload),
+    });
+
+    if (!webhookReponse.ok) {
+      const val = await webhookReponse.json();
+
+      console.log(val);
+    }
+
     const payload = {
       total: subTotal,
     };
