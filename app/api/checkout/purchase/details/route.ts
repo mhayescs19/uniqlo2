@@ -26,6 +26,7 @@ async function getPurchaseDetails() {
 }
 
 async function updatePurchaseDetails(request: Request) {
+  console.log("in webhook upsert");
   const body = await request.json();
   console.log("in webhook upsert");
   const { tagIds } = body;
