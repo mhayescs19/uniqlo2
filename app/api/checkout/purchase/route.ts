@@ -4,10 +4,10 @@ import { supabase } from "@/config/supabase";
  *
  * @param request list of product uuids
  * @returns payload = {
- *    total: (number)
+ *      order: (order)
  * }
  */
-async function createSubtotal(request: Request) {
+async function createPurchase(request: Request) {
   const body = await request.json();
 
   const { tagIds } = body;
@@ -33,30 +33,37 @@ async function createSubtotal(request: Request) {
 
   console.log("tagID: " + tagIds[0]);
   const tags: number[] = tagIds;
-  let subTotal = 0;
-  try {
-    // todo: alternative is using values and join sql query to preserve duplicates instead of searching each id in loop
-    // use case: orders are no more than 10-15 items so ok
-    for (const id of tags) {
-      const { data, error } = await supabase
-        .from("product")
-        .select("price")
-        .eq("id", id);
 
-      console.log(data![0].price);
+  try {
+    // create order to track purchase group of all items
+    const { data, error } = await supabase
+      .from("order")
+      .insert({
+        order_size: tags.length,
+      })
+      .select(); // insert and return the data
+
+    if (error) throw new Error(error.message);
+
+    console.log(data);
+
+    const newOrder = data![0];
+
+    const order_pk = newOrder.id; // obtain order_id
+
+    // populate the individual items into the transaction
+    tags.forEach(async (num) => {
+      const { error } = await supabase.from("transaction").insert({
+        product_id: num,
+        order_id: order_pk,
+      });
 
       if (error) throw new Error(error.message);
+    });
 
-      subTotal += data![0].price;
-    }
-
-    console.log("things subtotaled");
-    console.log(subTotal);
     const payload = {
-      total: subTotal,
+      order: newOrder,
     };
-
-    console.log(payload);
 
     return NextResponse.json(payload);
   } catch (error) {
@@ -64,4 +71,4 @@ async function createSubtotal(request: Request) {
   }
 }
 
-export const POST = createSubtotal;
+export const POST = createPurchase;
