@@ -3,6 +3,9 @@ import { supabase } from "@/config/supabase";
 /**
  *
  * @param request list of product uuids
+ * @returns payload = {
+ *    total: (number)
+ * }
  */
 async function createSubtotal(request: Request) {
   const body = await request.json();
@@ -30,23 +33,35 @@ async function createSubtotal(request: Request) {
 
   console.log("tagID: " + tagIds[0]);
   const tags: number[] = tagIds;
-
-  const { data, error } = await supabase
-    .from("product")
-    .select("price")
-    .in("id", tags); // find all products that have the tag ids
-
-  if (error) throw error;
-
   let subTotal = 0;
-  const prices = data!;
-  prices.forEach((item) => {
-    subTotal += item.price;
-  });
+  try {
+    // todo: alternative is using values and join sql query to preserve duplicates instead of searching each id in loop
+    // use case: orders are no more than 10-15 items so ok
+    for (const id of tags) {
+      const { data, error } = await supabase
+        .from("product")
+        .select("price")
+        .eq("id", id);
 
-  console.log(subTotal);
+      console.log(data![0].price);
 
-  return NextResponse.json(subTotal);
+      if (error) throw new Error(error.message);
+
+      subTotal += data![0].price;
+    }
+
+    console.log("things subtotaled");
+    console.log(subTotal);
+    const payload = {
+      total: subTotal,
+    };
+
+    console.log(payload);
+
+    return NextResponse.json(payload);
+  } catch (error) {
+    return NextResponse.json({ error: error }, { status: 400 });
+  }
 }
 
 export const POST = createSubtotal;
