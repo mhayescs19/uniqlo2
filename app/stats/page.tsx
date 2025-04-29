@@ -1,6 +1,6 @@
 "use client";
 
-import { LucideBanknoteArrowUp } from "lucide-react";
+import { LucideBanknoteArrowUp, LucidePartyPopper } from "lucide-react";
 import { useState, useEffect } from "react";
 
 interface Dashboard {
@@ -51,7 +51,10 @@ export default function StatsPage() {
               }`}</div>
             </div>
             <div className="flex flex-col">
-              <div className=""></div>
+              <div className="flex flex-row drop-shadow-xs">
+                <LucidePartyPopper size={18} width={1} color="white" />
+                <div className="p-2 text-[0.625rem]">up all time</div>
+              </div>
             </div>
           </div>
         ) : (
