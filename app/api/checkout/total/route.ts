@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/config/supabase";
+import { SITE_BASE_URL } from "@/config/config";
 /**
  *
  * @param request list of product uuids
@@ -52,6 +53,29 @@ async function createSubtotal(request: Request) {
 
     console.log("things subtotaled");
     console.log(subTotal);
+
+    const webhookPayload = {
+      tagIds: tags,
+      total: subTotal,
+    };
+
+    const webhookReponse = await fetch(
+      `${SITE_BASE_URL}/api/checkout/purchase/details`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(webhookPayload),
+      }
+    );
+
+    if (!webhookReponse.ok) {
+      const val = await webhookReponse.json();
+
+      console.log(val);
+    }
+
     const payload = {
       total: subTotal,
     };

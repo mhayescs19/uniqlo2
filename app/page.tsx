@@ -1,9 +1,36 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function Home() {
+  const [orderTotal, setOrderTotal] = useState(-1);
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      const webHookResponse = await fetch("/api/checkout/purchase/details");
+
+      if (!webHookResponse.ok) {
+        const val = await webHookResponse.json();
+
+        throw new Error(val.body);
+      }
+
+      const body = await webHookResponse.json();
+      const { price } = body;
+
+      console.log("home render");
+      console.log(price);
+
+      setOrderTotal(price);
+    };
+
+    fetchOrder();
+
+    const id = setInterval(fetchOrder, 10_000);
+    return () => clearInterval(id);
+  }, []);
   return (
     <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <h1 className="text-3xl font-bold">Uniqlo 2</h1>
@@ -188,6 +215,124 @@ export default function Home() {
       >
         Get sales by period and limit
       </Button>
+      <Button
+        className="border-solid border-amber-200 cursor-pointer"
+        onClick={async () => {
+          const ids = [1172546379849105, 1172546379849105, 1176944426360209];
+
+          const payload = {
+            tagIds: ids,
+          };
+
+          console.log(JSON.stringify(payload));
+          const response = await fetch("/api/stats/transaction/sales/fit", {
+            method: "GET",
+          });
+
+          if (!response.ok) {
+            const val = await response.json();
+
+            console.log(val);
+          }
+
+          const { fits } = await response.json();
+
+          toast("sales", {
+            description: `fits:${fits}`,
+          });
+        }}
+      >
+        Get fit distribution
+      </Button>
+      <Button
+        className="border-solid border-amber-200 cursor-pointer"
+        onClick={async () => {
+          const ids = [1172546379849105, 1172546379849105, 1176944426360209];
+
+          const payload = {
+            tagIds: ids,
+          };
+
+          console.log(JSON.stringify(payload));
+          const response = await fetch("/api/stats/order/size", {
+            method: "GET",
+          });
+
+          if (!response.ok) {
+            const val = await response.json();
+
+            console.log(val);
+          }
+
+          const { orderAverage, orderAverageOld, orderComparison } =
+            await response.json();
+
+          toast("sales", {
+            description: `avg:${orderAverage} avgOld: ${orderAverageOld} ordComp: ${orderComparison}`,
+          });
+        }}
+      >
+        Get order average
+      </Button>
+      <Button
+        className="border-solid border-amber-200 cursor-pointer"
+        onClick={async () => {
+          const ids = [1172546379849105, 1172546379849105, 1176944426360209];
+
+          const payload = {
+            tagIds: ids,
+          };
+
+          console.log(JSON.stringify(payload));
+          const response = await fetch("/api/checkout/purchase/details", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            const val = await response.json();
+
+            console.log(val);
+          }
+
+          toast("Webhook pinged", {
+            description: `yeay`,
+          });
+        }}
+      >
+        Ping update last subtotal webhook
+      </Button>
+      <Button
+        className="border-solid border-amber-200 cursor-pointer"
+        onClick={async () => {
+          const ids = [1172546379849105, 1172546379849105, 1176944426360209];
+
+          const payload = {
+            tagIds: ids,
+          };
+
+          console.log(JSON.stringify(payload));
+          const response = await fetch("/api/checkout/purchase/details");
+
+          if (!response.ok) {
+            const val = await response.json();
+
+            console.log(val);
+          }
+
+          const { productIds } = await response.json();
+
+          toast("Webhook pinged", {
+            description: `${productIds}`,
+          });
+        }}
+      >
+        Get webhook data
+      </Button>
+      <div>{orderTotal !== -1 ? `$${orderTotal}` : <div>Loading</div>}</div>
     </div>
   );
 }
