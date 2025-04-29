@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Product } from "@/app/api/checkout/purchase/details/route";
+import { LucideShoppingCart } from "lucide-react";
 
 interface orderPreview {
   productList: Product[];
@@ -85,7 +86,12 @@ export default function PurchasePage() {
           </div>
         </div>
       ) : (
-        <p>No orders yet!</p>
+        <>
+          <div className="flex items-center justify-center flex-row gap-3">
+            <LucideShoppingCart size={32} />
+            <div className="factoExtraBold font-[2rem]">No live order yet!</div>
+          </div>
+        </>
       )}
     </>
   );
