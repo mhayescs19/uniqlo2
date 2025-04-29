@@ -56,6 +56,7 @@ async function createSubtotal(request: Request) {
 
     const webhookPayload = {
       tagIds: tags,
+      total: subTotal,
     };
 
     const webhookReponse = await fetch(
