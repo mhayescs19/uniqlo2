@@ -3,9 +3,19 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Product } from "@/app/api/checkout/purchase/details/route";
+
+interface orderPreview {
+  productList: Product[];
+  total: number;
+}
 
 export default function Home() {
-  const [orderTotal, setOrderTotal] = useState(-1);
+  const streamedOrder: orderPreview = {
+    productList: [],
+    total: -1,
+  };
+  const [liveOrder, setLiveOrder] = useState(streamedOrder);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -18,12 +28,23 @@ export default function Home() {
       }
 
       const body = await webHookResponse.json();
-      const { price } = body;
+      const { order } = body;
 
       console.log("home render");
-      console.log(price);
+      console.log(order);
 
-      setOrderTotal(price);
+      const updatedOrder: orderPreview = order;
+
+      console.log(order);
+      console.log(order.productList);
+
+      console.log("updated order");
+      console.log(updatedOrder);
+
+      console.log("products list");
+      console.log(updatedOrder.productList);
+
+      setLiveOrder(updatedOrder);
     };
 
     fetchOrder();
@@ -332,7 +353,26 @@ export default function Home() {
       >
         Get webhook data
       </Button>
-      <div>{orderTotal !== -1 ? `$${orderTotal}` : <div>Loading</div>}</div>
+      <div>
+        {liveOrder.total !== -1 ? (
+          <>
+            <div>
+              {liveOrder.productList.map((item) => (
+                <div key={item.id}>
+                  {" "}
+                  {/* Assuming each item has a unique id */}
+                  <p>{item.name}</p>
+                  <p>{item.fit}</p>
+                  <p>{`$${item.price}`}</p>
+                </div>
+              ))}
+            </div>
+            <div>{`$${liveOrder.total}`}</div>
+          </>
+        ) : (
+          <div>Loading</div>
+        )}
+      </div>
     </div>
   );
 }
