@@ -1,6 +1,14 @@
 import { supabase } from "@/config/supabase";
 import { NextResponse } from "next/server";
 
+export interface Product {
+  id: number;
+  created_at: Date;
+  price: number;
+  name: string;
+  fit: string;
+}
+
 async function getPurchaseDetails() {
   try {
     const { data, error } = await supabase
@@ -11,16 +19,50 @@ async function getPurchaseDetails() {
 
     if (error) throw new Error(error.message);
 
+    // subtotal_webhook shape is id product_ids, subtotal
+
     console.log("subtotal webhook");
+
     console.log(data);
 
     const subTotal = data![0].subtotal;
+    console.log("subtotal product ids");
+    const productIds = data![0].product_ids;
+    console.log(productIds);
+
+    let products: Product[] = [];
+
+    try {
+      for (const id of productIds) {
+        // console.log("check id");
+        // console.log(id);
+        const { data, error } = await supabase
+          .from("product")
+          .select()
+          .eq("id", id);
+
+        // console.log("individual product");
+        // console.log(data);
+        const newProduct: Product = data![0];
+
+        products.push(newProduct);
+
+        if (error) throw new Error(error.message);
+      }
+    } catch (error) {
+      return NextResponse.json({ error: error }, { status: 400 });
+    }
 
     console.log(subTotal);
 
     const payload = {
-      price: subTotal,
+      order: {
+        productList: products,
+        total: subTotal,
+      },
     };
+
+    console.log(payload);
 
     return NextResponse.json(payload);
   } catch (error) {
