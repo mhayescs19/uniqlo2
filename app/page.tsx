@@ -1,9 +1,36 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function Home() {
+  const [orderTotal, setOrderTotal] = useState(-1);
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      const webHookResponse = await fetch("/api/checkout/purchase/details");
+
+      if (!webHookResponse.ok) {
+        const val = await webHookResponse.json();
+
+        throw new Error(val.body);
+      }
+
+      const body = await webHookResponse.json();
+      const { price } = body;
+
+      console.log("home render");
+      console.log(price);
+
+      setOrderTotal(price);
+    };
+
+    fetchOrder();
+
+    const id = setInterval(fetchOrder, 10_000);
+    return () => clearInterval(id);
+  }, []);
   return (
     <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <h1 className="text-3xl font-bold">Uniqlo 2</h1>
@@ -305,6 +332,7 @@ export default function Home() {
       >
         Get webhook data
       </Button>
+      <div>{orderTotal !== -1 ? `$${orderTotal}` : <div>Loading</div>}</div>
     </div>
   );
 }
