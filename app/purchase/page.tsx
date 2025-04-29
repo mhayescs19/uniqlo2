@@ -45,7 +45,7 @@ export default function PurchasePage() {
 
     fetchOrder();
 
-    const id = setInterval(fetchOrder, 10_000);
+    const id = setInterval(fetchOrder, 2_000);
     return () => clearInterval(id);
   }, []);
 
@@ -67,14 +67,14 @@ export default function PurchasePage() {
                 <tbody>
                   {liveOrder.productList.map((item) => (
                     <tr key={item.id} className="">
-                      <td className="p-4 border-2 border-r-0 border-r-0 border-gray-light rounded-l-[0.3125rem]">
+                      <td className="p-4 border-2 border-r-0 border-gray-light rounded-l-[0.3125rem]">
                         {item.name}
                       </td>
                       <td className="p-4 border-2 border-l-0 border-r-0 border-gray-light">
                         {item.fit.toUpperCase()}
                       </td>
                       <td className="p-4 flex items-center justify-between border-2 border-l-0 border-gray-light rounded-r-[0.3125rem]">
-                        <span>${item.price}</span>
+                        <span>${item.price.toFixed(2)}</span>
                       </td>
                     </tr>
                   ))}
