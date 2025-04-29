@@ -5,18 +5,21 @@ async function getPurchaseDetails() {
   try {
     const { data, error } = await supabase
       .from("subtotal_webhook")
-      .select("product_ids")
+      .select()
       .order("id", { ascending: false })
       .limit(1);
 
     if (error) throw new Error(error.message);
 
-    const productIds = data![0].product_ids;
+    console.log("subtotal webhook");
+    console.log(data);
 
-    console.log(productIds[0]);
+    const subTotal = data![0].subtotal;
+
+    console.log(subTotal);
 
     const payload = {
-      productIds: productIds[0],
+      price: subTotal,
     };
 
     return NextResponse.json(payload);
@@ -29,14 +32,14 @@ async function updatePurchaseDetails(request: Request) {
   console.log("in webhook upsert");
   const body = await request.json();
   console.log("in webhook upsert");
-  const { tagIds } = body;
+  const { tagIds, total } = body;
   console.log(tagIds);
 
   try {
     // update data in first slot of db
     const { data, error } = await supabase
       .from("subtotal_webhook")
-      .upsert({ id: 1, product_ids: tagIds });
+      .upsert({ id: 1, product_ids: tagIds, subtotal: total });
 
     if (error) throw new Error(error.message);
 
