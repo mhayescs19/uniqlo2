@@ -6,10 +6,10 @@ import { NextRequest, NextResponse } from "next/server";
  *
  * @param request
  * @returns payload = {
- *    orders: [
- *        count: (number)
- *    ],
- *    type: (enum: max, min, average)
+ *    orderAverage: (number),
+      orderAverageOld: (number),
+      orderComparison: (number),
+      isPositive: (boolean),
  * }
  */
 async function getOrderMetrics(request: NextRequest) {
@@ -66,10 +66,13 @@ async function getOrderMetrics(request: NextRequest) {
         ? metricData
         : (metricData - comparisonData) / comparisonData; // if old data is zero and new data
 
+    const isPositive = percentageChange >= 0 ? true : false;
+
     const payload = {
       orderAverage: metricData,
       orderAverageOld: comparisonData,
-      orderComparison: percentageChange,
+      orderComparison: Math.abs(percentageChange) * 100,
+      isPositive: isPositive,
     };
 
     console.log(payload);
