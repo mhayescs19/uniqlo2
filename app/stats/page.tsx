@@ -251,7 +251,7 @@ export default function StatsPage() {
                                 <tspan
                                   x={viewBox.cx}
                                   y={(viewBox.cy || 0) - 16}
-                                  className="fill-foreground text-2xl font-bold"
+                                  className="inter-medium text-2xl"
                                 >
                                   {liveDashboard.distribution[0].m +
                                     liveDashboard.distribution[0].f +
@@ -260,7 +260,7 @@ export default function StatsPage() {
                                 <tspan
                                   x={viewBox.cx}
                                   y={(viewBox.cy || 0) + 4}
-                                  className="fill-muted-foreground"
+                                  className="inter-medium text-ugray"
                                 >
                                   Products
                                 </tspan>
