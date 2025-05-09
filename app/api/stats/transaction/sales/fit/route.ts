@@ -1,6 +1,10 @@
 import { supabase } from "@/config/supabase";
 import { NextResponse } from "next/server";
 
+interface Fit {
+  fit: string;
+  count: number;
+}
 /**
  * @returns payload = {
  *      fits: [
@@ -28,8 +32,19 @@ async function getFitDistribution() {
 
     if (error) throw new Error(error.message);
 
+    const fits: Fit[] = data;
+
+    const chartData = [
+      {
+        month: "May",
+        m: fits[0].count,
+        f: fits[1].count,
+        ux: fits[2].count,
+      },
+    ];
+
     const payload = {
-      fits: data,
+      fits: chartData,
     };
 
     console.log(payload);
