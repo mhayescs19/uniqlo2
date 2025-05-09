@@ -75,7 +75,7 @@ export default function PurchasePage() {
                         {item.fit.toUpperCase()}
                       </td>
                       <td className="p-4 flex items-center justify-between border-2 border-l-0 border-gray-light rounded-r-[0.3125rem]">
-                        <span>${Number(item.price).toFixed(2)}</span>
+                        <span>${item.price}</span>
                       </td>
                     </tr>
                   ))}
