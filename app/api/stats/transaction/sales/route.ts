@@ -1,3 +1,4 @@
+import { supabase } from "@/config/supabase";
 import { NextResponse } from "next/server";
 
 /**
@@ -5,12 +6,12 @@ import { NextResponse } from "next/server";
  *
  * @param period: interval in hours to squash sales into a finite statistic (eg. 24 would condense the transaction history into sales datapoints every 24 hrs)
  * @param limit: number of previous days from now for sales statistics
- * @param request .../sales?period={}&limit={}
+ * @param request .../sales?period={}
  * @returns payload = {
- *       transactions: [
+ *       salesSummary: [
  *                       {
- *                          period: (date),
- *                          sales: (number)
+ *                          day: (date),
+ *                          sales_value: (number)
  *                       }
  *                     ]
  * }
@@ -18,15 +19,28 @@ import { NextResponse } from "next/server";
 async function getTransactionSales(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  const period = searchParams.get("period");
-  const limit = searchParams.get("limit");
+  const days = searchParams.get("period");
+  const daysInt = parseInt(days!);
 
-  const payload = {
-    period: period,
-    limit: limit,
-  };
+  console.log(days);
 
-  return NextResponse.json(payload);
+  try {
+    const { data, error } = await supabase.rpc("get_daily_sales_value", {
+      d: daysInt,
+    });
+
+    if (error) throw new Error(error.message);
+
+    const payload = {
+      chartData: data,
+    };
+
+    console.log(payload);
+
+    return NextResponse.json(data);
+  } catch (error) {
+    return NextResponse.json({ error: error }, { status: 400 });
+  }
 }
 
 export const GET = getTransactionSales;
