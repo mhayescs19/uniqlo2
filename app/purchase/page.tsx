@@ -75,13 +75,15 @@ export default function PurchasePage() {
                         {item.fit.toUpperCase()}
                       </td>
                       <td className="p-4 flex items-center justify-between border-2 border-l-0 border-gray-light rounded-r-[0.3125rem]">
-                        <span>${item.price}</span>
+                        <span>${Number(item.price).toFixed(2)}</span>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              <div className="flex justify-end pr-2 pb-2 factoExtraBold">{`Total Price: $${liveOrder.total}`}</div>
+              <div className="flex justify-end pr-2 pb-2 factoExtraBold">{`Total Price: $${Number(
+                liveOrder.total
+              ).toFixed(2)}`}</div>
             </div>
           </div>
         </div>
