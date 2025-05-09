@@ -20,7 +20,7 @@ async function getTotalSales() {
     if (error) throw new Error(error.message);
 
     const payload = {
-      totalSales: data,
+      totalSales: data.toFixed(2),
     };
 
     return NextResponse.json(payload);
