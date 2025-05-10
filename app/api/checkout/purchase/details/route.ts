@@ -58,7 +58,7 @@ async function getPurchaseDetails() {
     const payload = {
       order: {
         productList: products,
-        total: subTotal,
+        total: subTotal.toFixed(2),
       },
     };
 

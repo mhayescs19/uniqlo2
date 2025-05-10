@@ -4,6 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-ublue: #70abf5;
+  --color-ublue-stroke: #417cc6;
+  --color-ublue-stroke-secondary: #244976;
+  --color-ugray: #6d6d6d;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -143,6 +147,24 @@
   font-family: "facto", sans-serif;
   font-weight: 800;
   font-style: normal;
+}
+
+.inter-medium {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+}
+
+.inter-bold {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+}
+
+.inter-extra-bold {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
 }
 
 /* pill styling for radio button */

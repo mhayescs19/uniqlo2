@@ -81,7 +81,9 @@ export default function PurchasePage() {
                   ))}
                 </tbody>
               </table>
-              <div className="flex justify-end pr-2 pb-2 factoExtraBold">{`Total Price: $${liveOrder.total}`}</div>
+              <div className="flex justify-end pr-2 pb-2 factoExtraBold">{`Total Price: $${Number(
+                liveOrder.total
+              ).toFixed(2)}`}</div>
             </div>
           </div>
         </div>
