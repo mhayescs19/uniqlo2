@@ -11,9 +11,9 @@ export default function Navbar() {
         <a className="inter-medium" href="/purchase">
           Purchase
         </a>
-        <a className="inter-medium" href="/manage">
+        {/*<a className="inter-medium" href="/manage">
           Manage
-        </a>
+        </a>*/}
       </div>
     </nav>
   );
