@@ -1,55 +1,9 @@
-# Get subtotal
+# Uniqlo 2
 
-```
-{
-    tagIds: [
-        hex1,
-        hex2,
-        hex3
-    ]
-}
-```
+## Quick Links
+1. [ESP 32 Demo Video](https://drive.google.com/file/d/1bGzWm6JUhcXUqmyM6QgzmwbREvhpOBwm/view?usp=sharing)
+2. [Web Demo with Data Insights Video](https://drive.google.com/file/d/1T34vu5ZFe8sqTC6KoW-WBMJe6WhgRF2U/view?usp=sharing)
+3. [ESP Source Code Repo](https://github.com/kcristobal07/rfid-project)
+4. Uniqlo2 Web Source Code Repo (this REPO!)
 
-const tags = []
 
-const costs = [] = DynamoDBGet(tags) // do lookup on the Product table to match the ids
-
-const subtotal = costs.sum()
-
-send subtotal as response back to ESP 32
-
-# Purchase
-
-```
-{
-    tagIds: [
-        hex1,
-        hex2,
-        hex3
-    ]
-}
-```
-
-DynamoDBAddPurchase(tags)
-
-// purchase table
-
-purchase_id
-product_id
-time
-
-RFID
-tag_id
-payload: product uuid
-
-tag_id == product uuid stored in db
-
-payload.product uuid == product uuid stored in db
-
-read tags in loop
-
-read tag_1 -> tag_1 is read so recognize tag 1 again
-
-what happens if there are two tag_1 s
-
-only read tag_1 once
