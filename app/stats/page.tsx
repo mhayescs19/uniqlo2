@@ -1,6 +1,15 @@
 "use client";
 
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+import {
+  CartesianGrid,
+  Label,
+  Line,
+  LineChart,
+  PolarRadiusAxis,
+  RadialBar,
+  RadialBarChart,
+  XAxis,
+} from "recharts";
 import {
   Card,
   CardContent,
@@ -17,6 +26,7 @@ import {
 } from "@/components/ui/chart";
 import {
   LucideBanknoteArrowUp,
+  LucideChartLine,
   LucideCircleFadingArrowUp,
   LucidePartyPopper,
   LucidePieChart,
@@ -37,16 +47,22 @@ interface RadialData {
   ux: number;
 }
 
+interface LineData {
+  date: string;
+  salesValue: number;
+}
+
 interface Dashboard {
   totalSales: number;
   averageOrder: AverageOrder;
   distribution: RadialData[];
+  sales: LineData[];
 }
 
 export default function StatsPage() {
   const [liveDashboard, setLiveDashboard] = useState<Dashboard>();
 
-  const chartConfig = {
+  const radialChartConfig = {
     m: {
       label: "Male",
       color: "#70abf5",
@@ -60,6 +76,13 @@ export default function StatsPage() {
       color: "#266DD3",
     },
   } satisfies ChartConfig;
+
+  const lineChartConfig = {
+    sales_value: {
+      label: "Sales",
+      color: "#417cc6",
+    },
+  };
 
   useEffect(() => {
     const fetchDash = async () => {
@@ -102,6 +125,24 @@ export default function StatsPage() {
 
       console.log(fits);
 
+      const salesResponse = await fetch(
+        "/api/stats/transaction/sales?period=30"
+      );
+
+      if (!salesResponse.ok) {
+        const val = await salesResponse.json();
+
+        throw new Error(val.body);
+      }
+
+      const salesBody = await salesResponse.json();
+      const { chartData } = salesBody;
+
+      console.log("chart data");
+      console.log(chartData);
+
+      console.log(fits);
+
       const updates = {
         ...liveDashboard,
         totalSales: totalSales,
@@ -111,6 +152,7 @@ export default function StatsPage() {
           isPositive: isPositive,
         },
         distribution: fits,
+        sales: chartData,
       };
 
       setLiveDashboard(updates);
@@ -120,7 +162,7 @@ export default function StatsPage() {
   }, []);
 
   return (
-    <div>
+    <div className="pl-6 pr-6">
       <div className="w-full flex rounded-md mt-9.5">
         {liveDashboard && liveDashboard.totalSales !== null ? (
           <div className="flex flex-col gap-2 mx-auto border border-outline-gray-light-4 p-1 pl-3 pr-3 rounded-[0.3125rem]">
@@ -148,9 +190,9 @@ export default function StatsPage() {
                         up all time
                       </div>
                     </div>
-                    <div className="inter-bold text-center text-ugray text-[0.625rem] text-gray">
+                    {/*<div className="inter-bold text-center text-ugray text-[0.625rem] text-gray">
                       up all time
-                    </div>
+                    </div>*/}
                   </div>
                 </div>
               </div>
@@ -220,7 +262,7 @@ export default function StatsPage() {
                   </div>
                 </div>
                 <ChartContainer
-                  config={chartConfig}
+                  config={radialChartConfig}
                   className="mx-auto aspect-square w-full max-w-[250px]"
                 >
                   <RadialBarChart
@@ -292,6 +334,75 @@ export default function StatsPage() {
                       className="stroke-transparent stroke-2"
                     />
                   </RadialBarChart>
+                </ChartContainer>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div>Loading</div>
+        )}
+
+        {liveDashboard && liveDashboard.sales !== null ? (
+          <div className="flex flex-col gap-2 mx-auto border border-outline-gray-light-4 p-1 pl-3 pr-3 rounded-[0.3125rem] mt-9">
+            <div className="flex flex-row">
+              <div className="flex flex-col">
+                <div className="flex flex-row p-2 gap-1.75">
+                  <LucideChartLine size={24} color="#6D6D6D" />
+                  <div className="inter-extra-bold font-medium text-ugray text-[1rem]">
+                    Sales Over Time
+                  </div>
+                </div>
+                <ChartContainer
+                  config={lineChartConfig}
+                  className="aspect-auto h-[250px] w-full"
+                >
+                  <LineChart
+                    accessibilityLayer
+                    data={liveDashboard.sales}
+                    margin={{
+                      left: 12,
+                      right: 12,
+                    }}
+                  >
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                      dataKey="date"
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={8}
+                      minTickGap={32}
+                      tickFormatter={(value) => {
+                        const date = new Date(value);
+                        return date.toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        });
+                      }}
+                    />
+                    <ChartTooltip
+                      content={
+                        <ChartTooltipContent
+                          className="w-[150px]"
+                          nameKey="sales"
+                          formatter={(value: any) => `$${value}`}
+                          labelFormatter={(value) => {
+                            return new Date(value).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            });
+                          }}
+                        />
+                      }
+                    />
+                    <Line
+                      dataKey="sales_value"
+                      type="monotone"
+                      stroke={`var(--color-ublue)`}
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  </LineChart>
                 </ChartContainer>
               </div>
             </div>
