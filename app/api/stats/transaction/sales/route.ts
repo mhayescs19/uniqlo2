@@ -37,7 +37,7 @@ async function getTransactionSales(request: Request) {
 
     console.log(payload);
 
-    return NextResponse.json(data);
+    return NextResponse.json(payload);
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 400 });
   }
