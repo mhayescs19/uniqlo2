@@ -1,5 +1,5 @@
 # Uniqlo 2
-
+[uniqlo2.vercel.app](https://uniqlo2.vercel.app)
 ## Quick Links
 1. [Final Report](https://github.com/mhayescs19/uniqlo2/blob/main/docs/Project_Final_Report_CS596%20(1).pdf)
 2. [ESP 32 Demo Video](https://drive.google.com/file/d/1bGzWm6JUhcXUqmyM6QgzmwbREvhpOBwm/view?usp=sharing)
